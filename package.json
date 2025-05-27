@@ -1,0 +1,8 @@
+{
+  "name": "raijin",
+  "version": "1.0.0",
+  "description": "A vanilla JS workout tracking app",
+  "main": "index.js",
+  "author": "Your Name",
+  "license": "MIT"
+}
