@@ -11,3 +11,7 @@ document.getElementById("nav-profile").addEventListener("click", loadProfile);
 document.addEventListener("DOMContentLoaded", () => {
   loadLogWorkout(); 
 });
+document.getElementById("nav-stats").addEventListener("click", e => {
+  e.preventDefault();
+  loadStats();
+});

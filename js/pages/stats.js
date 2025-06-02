@@ -1,3 +1,4 @@
+import { capitalize } from "../utils/formatting.js";
 const contentSection = document.getElementById("content");
 
 export function loadStats() {
