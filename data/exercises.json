@@ -1,0 +1,32 @@
+{
+  "chest": [
+    {"id": "bench-press", "name": "Bench Press"},
+    {"id": "incline-dumbbell-press", "name": "Incline Dumbbell Press"},
+    {"id": "chest-fly", "name": "Chest Fly"}
+  ],
+  "shoulders": [
+    {"id": "overhead-press", "name": "Overhead Press"},
+    {"id": "lateral-raise", "name": "Lateral Raise"},
+    {"id": "front-raise", "name": "Front Raise"}
+  ],
+  "core": [
+    {"id": "plank", "name": "Plank"},
+    {"id": "russian-twist", "name": "Russian Twist"},
+    {"id": "leg-raises", "name": "Leg Raises"}
+  ],
+  "legs": [
+    {"id": "squat", "name": "Squat"},
+    {"id": "leg-press", "name": "Leg Press"},
+    {"id": "lunges", "name": "Lunges"}
+  ],
+  "back": [
+    {"id": "deadlift", "name": "Deadlift"},
+    {"id": "pull-up", "name": "Pull Up"},
+    {"id": "barbell-row", "name": "Barbell Row"}
+  ],
+  "arms": [
+    {"id": "bicep-curl", "name": "Bicep Curl"},
+    {"id": "tricep-dip", "name": "Tricep Dip"},
+    {"id": "hammer-curl", "name": "Hammer Curl"}
+  ]
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raijin – Workout Tracker</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Raijin</h1>
+    <nav>
+      <ul>
+        <li><a href="#" id="nav-log">Log Workout</a></li>
+        <li><a href="#" id="nav-routines">Routines</a></li>
+        <li><a href="#" id="nav-stats">Stats</a></li>
+        <li><a href="#" id="nav-profile">Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Muscle Groups</h2>
+      <ul id="muscle-groups">
+        <li><a href="#" data-group="chest">Chest</a></li>
+        <li><a href="#" data-group="shoulders">Shoulders</a></li>
+        <li><a href="#" data-group="core">Core</a></li>
+        <li><a href="#" data-group="legs">Legs</a></li>
+        <li><a href="#" data-group="back">Back</a></li>
+        <li><a href="#" data-group="arms">Arms</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section id="dashboard">
+        <h2>Welcome Back!</h2>
+        <button id="logWorkoutBtn">+ Log New Workout</button>
+        <div id="quick-stats">
+          <!-- JS fills stats here -->
+        </div>
+      </section>
+      <section id="content"></section>
+      <section id="exercise-list">
+        <h2>Available Exercises</h2>
+        <div id="exerciseContainer">
+          <!-- JS injects exercise cards here -->
+        </div>
+      </section>
+      <section id="profile-page" class="hidden">
+        <h2>👤 Profile</h2>
+        <div id="profile-container"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>
