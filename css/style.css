@@ -1,31 +1,52 @@
+:root {
+  --clr-dark: #121212;
+  --clr-light: #ffffff;
+  --clr-orange: #ff6600;
+  --clr-orange-light: #ff8b48;
+  --clr-grey-dark: #1e1e1e;
+  --clr-grey-medium: #444;
+  --clr-grey-light: #bfbfbf;
+
+  --radius: 12px;
+  --transition: all 0.3s ease;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--clr-dark);
+  color: var(--clr-grey-light);
 }
 
 header {
-  background-color: #1e1e2f;
-  color: white;
+  background-color: var(--clr-dark);
+  color: var(--clr-orange);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid var(--clr-grey-medium);
 }
 
 nav ul {
   list-style: none;
   display: flex;
   gap: 1rem;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
-nav ul li a {
-  color: white;
+nav a {
+  color: var(--clr-orange-light);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+nav a:hover,
+nav a:focus {
+  color: var(--clr-orange);
+  outline: none;
 }
 
 .container {
@@ -34,15 +55,16 @@ nav ul li a {
 }
 
 .sidebar {
-  width: 200px;
-  background-color: #222;
-  color: white;
-  padding: 1rem;
+  width: 220px;
+  background-color: var(--clr-dark);
+  padding: 1.5rem;
+  border-right: 1px solid var(--clr-grey-medium);
 }
 
 .sidebar h2 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  color: var(--clr-orange);
 }
 
 .sidebar ul {
@@ -50,51 +72,212 @@ nav ul li a {
   padding: 0;
 }
 
-.sidebar li a {
-  color: white;
-  text-decoration: none;
+.sidebar a {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  padding: 0.5rem 0.8rem;
+  color: var(--clr-grey-light);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.sidebar a:hover,
+.sidebar a:focus {
+  background-color: var(--clr-orange);
+  color: var(--clr-dark);
 }
 
 main {
   flex: 1;
   padding: 2rem;
+  background-color: var(--clr-grey-dark);
+  border-radius: 0 var(--radius) var(--radius) 0;
   overflow-y: auto;
 }
 
-#logWorkoutBtn {
-  padding: 0.5rem 1rem;
-  background-color: #38b6ff;
-  color: white;
+button,
+#logWorkoutBtn,
+#save-profile {
+  background-color: var(--clr-orange);
+  color: var(--clr-dark);
+  font-weight: 600;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius);
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+button:hover,
+#logWorkoutBtn:hover,
+#save-profile:hover {
+  background-color: var(--clr-orange-light);
+}
+
+.exercise-card,
+#profile-container section {
+  background-color: var(--clr-grey-medium);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius);
+  color: var(--clr-light);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+#profile-info label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--clr-orange);
+}
+
+/* === FORM AND INPUT STYLES WITH ORANGE BORDER === */
+form,
+#add-exercise-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--clr-orange-light);
+  border-radius: var(--radius);
+  padding: 1rem;
+  background-color: var(--clr-grey-dark);
+}
+
+form label,
+#add-exercise-form label {
+  width: 100%;
+  font-weight: 600;
+  color: var(--clr-orange-light);
+  margin-top: 1rem;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="url"],
+form input[type="password"],
+form select,
+form textarea,
+#profile-info input,
+input[type="text"],
+input[type="url"],
+input[type="password"],
+select {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.4rem 0.6rem; /* reduced padding */
+  border: 1px solid var(--clr-orange-light);
+  border-radius: var(--radius);
+  background-color: var(--clr-grey-dark);
+  color: var(--clr-light);
+  font-size: 0.95rem; /* slightly smaller font */
+  transition: var(--transition);
+  box-sizing: border-box;
+  outline: none;
+}
+
+form textarea {
+  min-height: 1.5rem; /* slightly smaller height */
+  resize: vertical;
+}
+
+input[type="number"] {
+  width: 3.5rem;
+  text-align: center;
+}
+
+/* Focus styles with brighter orange and subtle glow */
+form input:focus,
+form select:focus,
+form textarea:focus,
+#profile-info input:focus,
+input[type="text"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+select:focus {
+  border-color: var(--clr-orange);
+  box-shadow: 0 0 0 2px rgba(255, 136, 72, 0.4);
+  outline: none;
+}
+
+#profile-message {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--clr-orange-light);
+  font-style: italic;
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 14 10'%3E%3Cpath fill='%23ff8b48' d='M1 1l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 1rem auto;
   cursor: pointer;
 }
 
-#exercise-list {
-  margin-top: 2rem;
+.my-routines {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.exercise-card {
-  background: white;
-  padding: 1rem;
+.routine-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--clr-grey-medium);
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+}
+
+.routine-item span {
+  font-weight: 600;
+  color: var(--clr-light);
+}
+
+.welcome-section {
+  margin-bottom: 2rem;
+}
+
+.welcome-section h1 {
   margin-bottom: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--clr-light);
 }
 
-#profile-container section {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+form button {
+  margin-top: 0.5rem;
 }
-#profile-container ul {
-  list-style: none;
-  padding: 0;
+
+.form-section {
+  margin-bottom: 2rem;
 }
-#profile-container li {
-  margin: 0.25rem 0;
+
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+
+  form,
+  #add-exercise-form {
+    flex-direction: column;
+  }
+
+  form input[type="number"] {
+    width: 100%;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--clr-grey-medium);
+  }
+
+  main {
+    border-radius: var(--radius);
+  }
 }

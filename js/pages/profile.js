@@ -3,40 +3,66 @@ import { muscleGroups } from "../utils/constants.js";
 
 const contentSection = document.getElementById("content");
 
+let usernameInput, avatarInput, totalWorkoutsElem, favMuscleElem, messageDiv, avatarPreview;
+
 export function loadProfile() {
   contentSection.innerHTML = `
     <h2>Your Profile</h2>
-    <div id="profile-info">
-      <label for="username">Name:</label>
-      <input type="text" id="username" placeholder="Enter your name" />
-      
-      <label for="avatar-url">Avatar URL:</label>
-      <input type="url" id="avatar-url" placeholder="Enter avatar image URL" />
-
-      <button id="save-profile">Save Profile</button>
-    </div>
+    <form id="profile-form" aria-label="User Profile Form">
+      <div id="profile-info">
+        <label for="username">Name:</label>
+        <input type="text" id="username" placeholder="Enter your name" aria-required="true" />
+        
+        <label for="avatar-url">Avatar URL:</label>
+        <input type="url" id="avatar-url" placeholder="Enter avatar image URL" aria-describedby="avatar-desc" />
+        <small id="avatar-desc">Optional: Provide a link to your avatar image.</small>
+        <img id="avatar-preview" alt="Avatar Preview" style="max-width:100px; margin-top:5px; display:none;" />
+        
+        <button type="submit" id="save-profile">Save Profile</button>
+      </div>
+    </form>
 
     <h3>Workout Summary</h3>
     <p>Total workouts logged: <strong id="total-workouts">0</strong></p>
     <p>Favorite muscle group: <strong id="fav-muscle">N/A</strong></p>
 
-    <div id="profile-message"></div>
+    <div id="profile-message" role="alert" aria-live="assertive"></div>
   `;
 
+  // Cache elements for performance
+  usernameInput = document.getElementById("username");
+  avatarInput = document.getElementById("avatar-url");
+  totalWorkoutsElem = document.getElementById("total-workouts");
+  favMuscleElem = document.getElementById("fav-muscle");
+  messageDiv = document.getElementById("profile-message");
+  avatarPreview = document.getElementById("avatar-preview");
+
+  // Load saved data into inputs and summary
   loadProfileData();
 
-  document.getElementById("save-profile").addEventListener("click", saveProfileData);
+  // Avatar live preview on input
+  avatarInput.addEventListener("input", updateAvatarPreview);
+
+  // Handle form submit
+  const form = document.getElementById("profile-form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    saveProfileData();
+  });
 }
 
 function loadProfileData() {
   const profile = JSON.parse(localStorage.getItem("profile") || "{}");
   const workouts = JSON.parse(localStorage.getItem("workouts") || "[]");
 
-  document.getElementById("username").value = profile.name || "";
-  document.getElementById("avatar-url").value = profile.avatar || "";
+  usernameInput.value = profile.name || "";
+  avatarInput.value = profile.avatar || "";
 
-  document.getElementById("total-workouts").textContent = workouts.length;
+  updateAvatarPreview();
 
+  totalWorkoutsElem.textContent = workouts.length;
+
+  // Count muscle group usage
   const muscleCounts = {};
   for (const group of muscleGroups) muscleCounts[group] = 0;
 
@@ -52,15 +78,41 @@ function loadProfileData() {
     { group: "N/A", count: 0 }
   ).group;
 
-  document.getElementById("fav-muscle").textContent = capitalize(favMuscle);
+  favMuscleElem.textContent = capitalize(favMuscle);
+}
+
+function updateAvatarPreview() {
+  const url = avatarInput.value.trim();
+  if (url) {
+    avatarPreview.src = url;
+    avatarPreview.style.display = "block";
+    avatarPreview.onerror = () => {
+      showMessage("Could not load avatar image. Please check the URL.", true);
+      avatarPreview.style.display = "none";
+    };
+    avatarPreview.onload = () => {
+      clearMessage();
+      avatarPreview.style.display = "block";
+    };
+  } else {
+    avatarPreview.style.display = "none";
+    avatarPreview.src = "";
+  }
 }
 
 function saveProfileData() {
-  const name = document.getElementById("username").value.trim();
-  const avatar = document.getElementById("avatar-url").value.trim();
+  const name = usernameInput.value.trim();
+  const avatar = avatarInput.value.trim();
 
   if (!name) {
-    showMessage("Please enter a name.", true);
+    showMessage("Please enter your name.", true);
+    usernameInput.focus();
+    return;
+  }
+
+  if (avatar && !isValidUrl(avatar)) {
+    showMessage("Please enter a valid avatar URL or leave it blank.", true);
+    avatarInput.focus();
     return;
   }
 
@@ -69,10 +121,20 @@ function saveProfileData() {
 }
 
 function showMessage(msg, isError) {
-  const msgDiv = document.getElementById("profile-message");
-  msgDiv.textContent = msg;
-  msgDiv.style.color = isError ? "red" : "green";
-  setTimeout(() => {
-    msgDiv.textContent = "";
-  }, 3000);
+  messageDiv.textContent = msg;
+  messageDiv.style.color = isError ? "crimson" : "green";
+}
+
+function clearMessage() {
+  messageDiv.textContent = "";
+}
+
+// Simple URL validation
+function isValidUrl(str) {
+  try {
+    new URL(str);
+    return true;
+  } catch {
+    return false;
+  }
 }
