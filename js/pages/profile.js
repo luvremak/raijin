@@ -18,7 +18,10 @@ export function loadProfile() {
         <small id="avatar-desc">Optional: Provide a link to your avatar image.</small>
         <img id="avatar-preview" alt="Avatar Preview" style="max-width:100px; margin-top:5px; display:none;" />
         
-        <button type="submit" id="save-profile">Save Profile</button>
+        <div style="margin-top: 10px;">
+          <button type="submit" id="save-profile">Save Profile</button>
+          <button id="logout-btn" type="button" style="margin-left: 10px;">Log Out</button>
+        </div>
       </div>
     </form>
 
@@ -29,7 +32,6 @@ export function loadProfile() {
     <div id="profile-message" role="alert" aria-live="assertive"></div>
   `;
 
-  // Cache elements for performance
   usernameInput = document.getElementById("username");
   avatarInput = document.getElementById("avatar-url");
   totalWorkoutsElem = document.getElementById("total-workouts");
@@ -37,18 +39,20 @@ export function loadProfile() {
   messageDiv = document.getElementById("profile-message");
   avatarPreview = document.getElementById("avatar-preview");
 
-  // Load saved data into inputs and summary
   loadProfileData();
 
-  // Avatar live preview on input
   avatarInput.addEventListener("input", updateAvatarPreview);
 
-  // Handle form submit
   const form = document.getElementById("profile-form");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     saveProfileData();
   });
+
+document.getElementById("logout-btn").addEventListener("click", () => {
+  localStorage.removeItem("profile");
+  window.location.href = "login.html";
+});
 }
 
 function loadProfileData() {
@@ -62,13 +66,12 @@ function loadProfileData() {
 
   totalWorkoutsElem.textContent = workouts.length;
 
-  // Count muscle group usage
   const muscleCounts = {};
   for (const group of muscleGroups) muscleCounts[group] = 0;
 
   for (const workout of workouts) {
     for (const ex of workout.exercises || []) {
-      const mg = (ex.muscleGroup || "").toLowerCase();
+      const mg = (ex.group || ex.muscleGroup || "").toLowerCase();
       if (muscleCounts[mg] !== undefined) muscleCounts[mg]++;
     }
   }
@@ -129,7 +132,6 @@ function clearMessage() {
   messageDiv.textContent = "";
 }
 
-// Simple URL validation
 function isValidUrl(str) {
   try {
     new URL(str);

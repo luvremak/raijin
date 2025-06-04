@@ -4,6 +4,7 @@ import { loadStats } from "./pages/stats.js";
 import { loadProfile } from "./pages/profile.js";
 import { muscleGroupRecommender, timeoutIterator } from './utils/generatorUtils.js';
 
+
 document.getElementById("nav-log").addEventListener("click", loadLogWorkout);
 document.getElementById("nav-routines").addEventListener("click", initRoutineUI);
 document.getElementById("nav-stats").addEventListener("click", loadStats);
