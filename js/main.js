@@ -3,7 +3,7 @@ import { loadLogWorkout } from "./pages/logWorkout.js";
 import { loadStats } from "./pages/stats.js";
 import { loadProfile } from "./pages/profile.js";
 import { muscleGroupRecommender, timeoutIterator } from './utils/generatorUtils.js';
-
+import { muscleGroups } from "./utils/constants.js";
 
 document.getElementById("nav-log").addEventListener("click", loadLogWorkout);
 document.getElementById("nav-routines").addEventListener("click", initRoutineUI);
@@ -18,7 +18,6 @@ document.getElementById("nav-stats").addEventListener("click", e => {
   loadStats();
 });
 
-const muscleGroups = ['Chest', 'Back', 'Legs', 'Arms', 'Shoulders', 'Core'];
 const excludeSet = new Set();
 const recommender = muscleGroupRecommender(muscleGroups, excludeSet);
 

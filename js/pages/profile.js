@@ -1,5 +1,5 @@
 import { capitalize } from "../utils/formatting.js";
-import { muscleGroups } from "../utils/constants.js";
+
 
 const contentSection = document.getElementById("content");
 

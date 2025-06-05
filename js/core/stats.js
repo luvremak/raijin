@@ -1,8 +1,5 @@
-import { capitalize } from "./workoutManager.js";
-
-const MUSCLE_GROUPS = ["back", "chest", "arms", "shoulders", "core", "legs"];
-
-// --- Core: Fetching ---
+import { capitalize } from "../utils/formatting.js";
+import { muscleGroups } from "../utils/constants.js";
 
 export function getAllWorkouts() {
   return JSON.parse(localStorage.getItem("workouts") || "[]");
@@ -15,7 +12,6 @@ export function getWorkoutsInRange(startDate, endDate) {
   });
 }
 
-// --- Volume: by Muscle Group ---
 
 export function getVolumeByMuscle(startDate, endDate) {
   const workouts = getWorkoutsInRange(startDate, endDate);
@@ -24,7 +20,7 @@ export function getVolumeByMuscle(startDate, endDate) {
   for (const w of workouts) {
     for (const ex of w.exercises || []) {
       const group = normalizeGroup(ex.group || ex.muscleGroup);
-      if (!MUSCLE_GROUPS.includes(group)) continue;
+      if (!muscleGroups.includes(group)) continue;
 
       const vol = (ex.sets || 0) * (ex.reps || 0) * (ex.weight || 1);
       volume[group] += vol;
@@ -34,8 +30,6 @@ export function getVolumeByMuscle(startDate, endDate) {
   return volume;
 }
 
-// --- Sets: by Muscle Group ---
-
 export function getSetDistribution(startDate, endDate) {
   const workouts = getWorkoutsInRange(startDate, endDate);
   const sets = Object.fromEntries(MUSCLE_GROUPS.map(g => [g, 0]));
@@ -43,7 +37,7 @@ export function getSetDistribution(startDate, endDate) {
   for (const w of workouts) {
     for (const ex of w.exercises || []) {
       const group = normalizeGroup(ex.group || ex.muscleGroup);
-      if (!MUSCLE_GROUPS.includes(group)) continue;
+      if (!muscleGroups.includes(group)) continue;
 
       sets[group] += ex.sets || 0;
     }
@@ -51,8 +45,6 @@ export function getSetDistribution(startDate, endDate) {
 
   return sets;
 }
-
-// --- Frequency: Top Exercises ---
 
 export function getTopExercises(limit = 5) {
   const workouts = getAllWorkouts();
@@ -65,7 +57,7 @@ export function getTopExercises(limit = 5) {
       let name = ex.name || ex.exerciseName;
       if (!name || typeof name !== "string") continue;
 
-      name = name.trim().toLowerCase(); // normalize
+      name = name.trim().toLowerCase(); 
 
       freq[name] = (freq[name] || 0) + 1;
     }
@@ -74,10 +66,8 @@ export function getTopExercises(limit = 5) {
   return Object.entries(freq)
     .sort((a, b) => b[1] - a[1])
     .slice(0, limit)
-    .map(([name, count]) => [capitalize(name), count]); // show nice names
+    .map(([name, count]) => [capitalize(name), count]);
 }
-
-// --- Helpers ---
 
 function normalizeGroup(name) {
   return (name || "").toLowerCase();

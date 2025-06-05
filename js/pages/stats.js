@@ -1,4 +1,5 @@
 import { capitalize } from "../utils/formatting.js";
+import { muscleGroups } from "../utils/constants.js";
 const contentSection = document.getElementById("content");
 
 export function loadStats() {
@@ -23,38 +24,31 @@ export function loadStats() {
   sevenDaysAgo.setDate(now.getDate() - 6);
 
   const dailyVolume = Array(7).fill(0);
-  const muscleGroups = ["chest", "back", "arms", "shoulders", "core", "legs"];
   const groupTotals = Object.fromEntries(muscleGroups.map(m => [m, 0]));
 
-  // Count top exercises
   const topExercisesCount = {};
 
   for (const w of workouts) {
     const workoutDate = new Date(w.date);
     if (workoutDate < sevenDaysAgo || workoutDate > now) continue;
 
-    // loop through each exercise inside the workout
     for (const ex of w.exercises || []) {
       const mg = (ex.muscleGroup || "").toLowerCase().trim();
       if (!muscleGroups.includes(mg)) continue;
 
       const volume = ex.sets * ex.reps * (ex.weight || 1);
 
-      // Add to daily volume
       const dayDiff = Math.floor((workoutDate - sevenDaysAgo) / (1000 * 60 * 60 * 24));
       if (dayDiff >= 0 && dayDiff < 7) dailyVolume[dayDiff] += volume;
 
-      // Add to muscle group totals
       groupTotals[mg] += volume;
 
-      // Count exercises for top list
       if (ex.exerciseName) {
         topExercisesCount[ex.exerciseName] = (topExercisesCount[ex.exerciseName] || 0) + 1;
       }
     }
   }
 
-  // Find muscle group with minimum volume (recommended next)
   const recommendedGroup = Object.entries(groupTotals).reduce((minGroup, [group, volume]) => {
     if (volume < minGroup.volume) return { group, volume };
     return minGroup;
@@ -62,7 +56,6 @@ export function loadStats() {
 
   document.getElementById("recommended-group").textContent = capitalize(recommendedGroup || "None");
 
-  // Volume bar chart
   new Chart(document.getElementById("volumeChart"), {
     type: "bar",
     data: {
@@ -83,7 +76,6 @@ export function loadStats() {
     }
   });
 
-  // Muscle distribution doughnut chart
   new Chart(document.getElementById("muscleDistributionChart"), {
     type: "doughnut",
     data: {
@@ -96,7 +88,6 @@ export function loadStats() {
     options: { responsive: true }
   });
 
-  // Top exercises list
   const sortedTop = Object.entries(topExercisesCount)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);

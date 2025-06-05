@@ -1,1 +1,1 @@
-export const muscleGroups = ["chest", "back", "arms", "shoulders", "core", "legs"];
+export const muscleGroups = ["Chest", "Back", "Arms", "Shoulders", "Core", "Legs"];

@@ -1,6 +1,7 @@
 import { loadExercisesData, saveExercisesData } from "../utils/dataStream.js";
 import { capitalize } from "../utils/formatting.js";
 import { workoutManager } from "../core/workoutManager.js";
+import { muscleGroups } from "../utils/constants.js";
 
 const contentSection = document.getElementById("content");
 
@@ -12,7 +13,6 @@ export async function loadLogWorkout() {
 
   let currentWorkoutExercises = [];
 
-  const muscleGroups = ["chest", "back", "arms", "shoulders", "core", "legs"];
   const groupVolumes = Object.fromEntries(muscleGroups.map(m => [m, 0]));
 
   const now = new Date();
