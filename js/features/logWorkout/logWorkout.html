@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAIJIN Log Workout</title>
+</head>
+<body>
+        <section id="log-workout-section" class="log-workout-section">
+    <header class="log-workout-header">
+        <h2>Log Workout</h2>
+        <button id="btn-start-routine" class="btn btn-primary">Start Routine</button>
+        <button id="btn-show-routine" class="btn btn-secondary">Show Routine</button>
+    </header>
+
+    <div id="current-workout-container" class="current-workout-container">
+        <!-- Current workout exercises will be rendered here -->
+    </div>
+
+    <div class="workout-controls">
+        <button id="btn-add-exercise" class="btn btn-primary">Add Exercise</button>
+        <button id="btn-log-workout" class="btn btn-success">Log Workout</button>
+        <button id="btn-cancel-workout" class="btn btn-warning">Cancel</button>
+    </div>
+
+    <section id="routine-preview" class="routine-preview hidden">
+        <h3>Routine Preview</h3>
+        <div id="routine-details">
+        <!-- Routine sets and reps will be displayed here -->
+        </div>
+        <button id="btn-close-routine-preview" class="btn btn-secondary">Close</button>
+    </section>
+
+    <section id="log-messages" class="log-messages" aria-live="polite" role="status">
+        <!-- Status or error messages will be shown here -->
+    </section>
+    </section>
+    <script src="../../pages/logWorkoutPage.js"></script>
+</body>
+</html>

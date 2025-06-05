@@ -1,7 +1,6 @@
-import { getRoutines, createRoutine, updateRoutine, findRoutineById } from "../pages/routines.js";
+import { getRoutines, createRoutine, updateRoutine, findRoutineById } from "../core/routineManager.js";
 import { loadExercisesData } from "../utils/dataStream.js";
-import { logWorkoutSession } from "../pages/logWorkout.js";
-import { loadLogWorkout } from "../pages/logWorkout.js";
+import { logWorkoutSession, loadLogWorkout } from "../features/logWorkout/logWorkout.js";
 
 
 const contentSection = document.getElementById("content");
