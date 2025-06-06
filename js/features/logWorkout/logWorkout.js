@@ -23,6 +23,24 @@ export async function loadLogWorkout() {
   };
 }
 
+export function buildLogWorkoutSection() {
+  const section = document.createElement("section");
+  section.id = "log-workout-section";
+
+  section.innerHTML = `
+    <h1>Log Workout</h1>
+    <div id="log-feedback" class="feedback-message"></div>
+    
+    <div id="current-workout-list" class="workout-list"></div>
+    <div id="current-workout-volume" class="workout-volume"></div>
+    <div id="current-workout-buttons" class="workout-buttons"></div>
+    
+    <h2>Workout History</h2>
+    <div id="workout-history-container" class="workout-history"></div>
+  `;
+
+  return section;
+}
 
 export function getCurrentWorkoutExercises() {
   return currentWorkoutExercises;

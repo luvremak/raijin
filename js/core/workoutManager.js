@@ -47,6 +47,13 @@ export function updateWorkout(updatedWorkout) {
   localStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
 }
 
+export function deleteWorkoutAtIndex(index) {
+  const workouts = getSavedWorkouts();
+  if (index >= 0 && index < workouts.length) {
+    workouts.splice(index, 1);
+    localStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
+  }
+}
 
 export const workoutManager = {
   getSavedWorkouts,
@@ -54,5 +61,7 @@ export const workoutManager = {
   saveWorkout,
   clearAllWorkouts,
   deleteWorkoutByDate,
-  updateWorkout
+  updateWorkout,
+  deleteWorkoutAtIndex
 };
+

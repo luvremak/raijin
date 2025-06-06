@@ -5,20 +5,18 @@ import {
   deleteExerciseFromCurrentWorkout,
   saveCurrentWorkout, 
   clearCurrentWorkout,
-  buildLogWorkoutSection
+  getCurrentWorkoutExercises
 } from "../features/logWorkout/logWorkout.js";
-import { getSavedWorkouts, deleteWorkoutAtIndex } from "../core/workoutManager.js";
+
+import { getSavedWorkouts } from "../core/workoutManager.js";
+
 import { renderWorkoutHistory } from "../ui/workoutHistoryUI.js";
 
 export async function initLogWorkoutPage() {
-
-  const mainContent = document.querySelector("#content");
-  mainContent.innerHTML = "";
-  mainContent.appendChild(buildLogWorkoutSection());
-
   const {
     exercisesData,
     savedWorkouts,
+    recommendedGroup,
     currentWorkoutExercises
   } = await loadLogWorkout();
 
@@ -26,16 +24,6 @@ export async function initLogWorkoutPage() {
   const volumeContainer = document.querySelector("#current-workout-volume");
   const buttonContainer = document.querySelector("#current-workout-buttons");
   const historyContainer = document.querySelector("#workout-history-container");
-  const feedbackContainer = document.querySelector("#log-feedback");
-
-  function showFeedback(message, type = "info") {
-    feedbackContainer.textContent = message;
-    feedbackContainer.className = `feedback-message ${type}`;
-    setTimeout(() => {
-      feedbackContainer.textContent = "";
-      feedbackContainer.className = "feedback-message";
-    }, 3000);
-  }
 
   function createExerciseSelect(selectedId = "") {
     const allExercises = [];
@@ -101,7 +89,8 @@ export async function initLogWorkoutPage() {
       setsInput.type = "number";
       setsInput.min = 0;
       setsInput.value = ex.sets || 0;
-      setsInput.placeholder = "Sets";
+      setsInput.className = "input-sets";
+      setsInput.title = "Sets";
       setsInput.addEventListener("input", (e) => {
         ex.sets = parseInt(e.target.value) || 0;
         editExerciseInCurrentWorkout(index, ex);
@@ -113,7 +102,8 @@ export async function initLogWorkoutPage() {
       repsInput.type = "number";
       repsInput.min = 0;
       repsInput.value = ex.reps || 0;
-      repsInput.placeholder = "Reps";
+      repsInput.className = "input-reps";
+      repsInput.title = "Reps";
       repsInput.addEventListener("input", (e) => {
         ex.reps = parseInt(e.target.value) || 0;
         editExerciseInCurrentWorkout(index, ex);
@@ -126,7 +116,8 @@ export async function initLogWorkoutPage() {
       weightInput.min = 0;
       weightInput.step = "0.1";
       weightInput.value = ex.weight || 0;
-      weightInput.placeholder = "Weight (kg)";
+      weightInput.className = "input-weight";
+      weightInput.title = "Weight (kg)";
       weightInput.addEventListener("input", (e) => {
         ex.weight = parseFloat(e.target.value) || 0;
         editExerciseInCurrentWorkout(index, ex);
@@ -162,6 +153,7 @@ export async function initLogWorkoutPage() {
 
     const addBtn = document.createElement("button");
     addBtn.textContent = "Add Exercise";
+    addBtn.className = "btn-add-exercise";
     addBtn.addEventListener("click", () => {
       addExerciseToCurrentWorkout({
         id: "",
@@ -177,73 +169,47 @@ export async function initLogWorkoutPage() {
 
     const saveBtn = document.createElement("button");
     saveBtn.textContent = "Save Workout";
+    saveBtn.className = "btn-save-workout";
     saveBtn.addEventListener("click", () => {
       try {
         if (currentWorkoutExercises.length === 0) {
-          showFeedback("Add at least one exercise before saving.", "warning");
+          alert("Add at least one exercise before saving.");
           return;
         }
         saveCurrentWorkout();
-        showFeedback("Workout saved!", "success");
+        alert("Workout saved!");
         clearCurrentWorkout();
         renderWorkoutUI();
-        renderButtons();
         const freshSavedWorkouts = getSavedWorkouts();
         renderWorkoutHistory(historyContainer, freshSavedWorkouts, {
-          onDeleteWorkout
+          onDeleteWorkout: (index) => {
+            alert("Delete logic goes here.");
+          }
         });
       } catch (err) {
-        showFeedback(err.message, "error");
+        alert(err.message);
       }
     });
     buttonContainer.appendChild(saveBtn);
 
     const clearBtn = document.createElement("button");
     clearBtn.textContent = "Clear Workout";
+    clearBtn.className = "btn-clear-workout";
     clearBtn.addEventListener("click", () => {
-      renderClearConfirmation();
+      if (confirm("Clear current workout?")) {
+        clearCurrentWorkout();
+        renderWorkoutUI();
+      }
     });
     buttonContainer.appendChild(clearBtn);
   }
 
-  function renderClearConfirmation() {
-    buttonContainer.innerHTML = "";
-
-    const confirmDiv = document.createElement("div");
-    confirmDiv.className = "clear-confirmation";
-
-    const message = document.createElement("span");
-    message.textContent = "Clear all exercises?";
-    confirmDiv.appendChild(message);
-
-    const yesBtn = document.createElement("button");
-    yesBtn.textContent = "Yes";
-    yesBtn.addEventListener("click", () => {
-      clearCurrentWorkout();
-      renderWorkoutUI();
-      renderButtons();
-      showFeedback("Workout cleared.", "success");
-    });
-    confirmDiv.appendChild(yesBtn);
-
-    const noBtn = document.createElement("button");
-    noBtn.textContent = "No";
-    noBtn.addEventListener("click", () => {
-      renderButtons();
-    });
-    confirmDiv.appendChild(noBtn);
-
-    buttonContainer.appendChild(confirmDiv);
-  }
-
-  function onDeleteWorkout(index) {
-    deleteWorkoutAtIndex(index); // your own implementation
-    const updated = getSavedWorkouts();
-    renderWorkoutHistory(historyContainer, updated, { onDeleteWorkout });
-    showFeedback("Workout deleted.", "success");
-  }
-
   renderWorkoutUI();
   renderButtons();
-  renderWorkoutHistory(historyContainer, savedWorkouts, { onDeleteWorkout });
+
+  renderWorkoutHistory(historyContainer, savedWorkouts, {
+    onDeleteWorkout: (index) => {
+      alert("Delete logic goes here.");
+    }
+  });
 }
