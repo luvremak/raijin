@@ -13,24 +13,7 @@ export async function loadLogWorkout() {
   const savedWorkoutsRaw = getSavedWorkouts();
   const savedWorkouts = savedWorkoutsRaw.filter(w => w && w.date && Array.isArray(w.exercises));
 
-  const groupVolumes = Object.fromEntries(muscleGroups.map(m => [m, 0]));
-
-  const now = new Date();
-  const sevenDaysAgo = new Date(now);
-  sevenDaysAgo.setDate(now.getDate() - 6);
-
-  for (const w of savedWorkouts) {
-    const date = new Date(w.date);
-    if (date >= sevenDaysAgo && w.exercises) {
-      for (const ex of w.exercises) {
-        if (groupVolumes[ex.muscleGroup] !== undefined) {
-          groupVolumes[ex.muscleGroup] += calculateWorkoutVolume(ex);
-        }
-      }
-    }
-  }
-
-  const recommendedGroup = recommendMuscleGroup(groupVolumes);
+  const recommendedGroup = recommendMuscleGroup(savedWorkouts);
 
   return {
     exercisesData,
@@ -39,6 +22,7 @@ export async function loadLogWorkout() {
     currentWorkoutExercises
   };
 }
+
 
 export function getCurrentWorkoutExercises() {
   return currentWorkoutExercises;
