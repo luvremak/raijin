@@ -46,3 +46,13 @@ export function updateWorkout(updatedWorkout) {
   workouts[index] = updatedWorkout;
   localStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
 }
+
+
+export const workoutManager = {
+  getSavedWorkouts,
+  createNewWorkout,
+  saveWorkout,
+  clearAllWorkouts,
+  deleteWorkoutByDate,
+  updateWorkout
+};

@@ -81,3 +81,9 @@ export function renderWorkoutButtons(container, handlers = {}) {
   if (handlers.onClearWorkout) clearBtn.addEventListener("click", handlers.onClearWorkout);
   container.appendChild(clearBtn);
 }
+
+export function renderCurrentWorkoutUI(listContainer, volumeContainer, buttonContainer, workout, handlers = {}) {
+  renderWorkoutList(listContainer, workout, handlers);
+  renderWorkoutVolume(volumeContainer, workout);
+  renderWorkoutButtons(buttonContainer, handlers);
+}

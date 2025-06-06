@@ -1,4 +1,4 @@
-import { capitalize } from "../utils/formatting.js";
+import { capitalize } from "../../utils/formatting.js";
 
 
 const contentSection = document.getElementById("content");

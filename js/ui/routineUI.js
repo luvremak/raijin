@@ -1,6 +1,9 @@
+import * as routineMgr from "../core/routineManager.js";
+console.log("routineMgr exports:", routineMgr);
+
 import { getRoutines, createRoutine, updateRoutine, findRoutineById } from "../core/routineManager.js";
 import { loadExercisesData } from "../utils/dataStream.js";
-import { logWorkoutSession, loadLogWorkout } from "../features/logWorkout/logWorkout.js";
+import { saveCurrentWorkout as logWorkoutSession, loadLogWorkout } from "../features/logWorkout/logWorkout.js";
 
 
 const contentSection = document.getElementById("content");
@@ -202,10 +205,11 @@ function startRoutineSession(routine) {
     name: routine.name + " - " + new Date().toLocaleString(),
     exercises: routine.exercises.map(ex => ({
       ...ex,
-      sets: 3, 
-      reps: 10 
+      sets: ex.sets || 3,
+      reps: ex.reps || 10
     }))
   };
+
 
   const editor = document.getElementById("routine-editor");
 

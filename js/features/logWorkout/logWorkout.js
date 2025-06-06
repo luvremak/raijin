@@ -1,16 +1,16 @@
 import { loadExercisesData, saveExercisesData } from "../../utils/dataStream.js";
 import { capitalize } from "../../utils/formatting.js";
-import { workoutManager } from '../../core/workoutManager.js';
+import { getSavedWorkouts, saveWorkout } from '../../core/workoutManager.js';
 import { muscleGroups } from "../../utils/constants.js";
-import { calculateExerciseVolume, calculateWorkoutVolume } from "./workoutVolume.js";
-import { recommendNextMuscleGroup } from "./workoutRecommender.js";
+import { calculateWorkoutVolume } from './workoutVolume.js';
+import { recommendMuscleGroup } from './workoutRecommender.js';
 
 let currentWorkoutExercises = [];
 
 export async function loadLogWorkout() {
   const exercisesData = await loadExercisesData();
 
-  const savedWorkoutsRaw = workoutManager.getSavedWorkouts();
+  const savedWorkoutsRaw = getSavedWorkouts();
   const savedWorkouts = savedWorkoutsRaw.filter(w => w && w.date && Array.isArray(w.exercises));
 
   const groupVolumes = Object.fromEntries(muscleGroups.map(m => [m, 0]));
@@ -24,13 +24,13 @@ export async function loadLogWorkout() {
     if (date >= sevenDaysAgo && w.exercises) {
       for (const ex of w.exercises) {
         if (groupVolumes[ex.muscleGroup] !== undefined) {
-          groupVolumes[ex.muscleGroup] += calculateExerciseVolume(ex);
+          groupVolumes[ex.muscleGroup] += calculateWorkoutVolume(ex);
         }
       }
     }
   }
 
-  const recommendedGroup = recommendNextMuscleGroup(groupVolumes);
+  const recommendedGroup = recommendMuscleGroup(groupVolumes);
 
   return {
     exercisesData,
@@ -78,7 +78,7 @@ export function saveCurrentWorkout() {
     exercises: currentWorkoutExercises
   };
 
-  workoutManager.saveWorkout(newWorkout);
+  saveWorkout(newWorkout);
   clearCurrentWorkout();
 }
 
