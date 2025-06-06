@@ -9,29 +9,46 @@ export function renderWorkoutHistory(container, workouts, handlers = {}) {
     return;
   }
 
-  const list = document.createElement("ul");
-  list.className = "workout-history-list";
-
   workouts.forEach((workout, index) => {
-    const item = document.createElement("li");
-    item.className = "workout-history-item";
+    const workoutBox = document.createElement("div");
+    workoutBox.className = "workout-history-box";
 
-    const dateStr = formatDate(workout.date);
-    const exerciseCount = Array.isArray(workout.exercises) ? workout.exercises.length : 0;
-    const totalVolume = (Array.isArray(workout.exercises) ? 
-      workout.exercises.reduce((sum, ex) => sum + calculateWorkoutVolume(ex), 0) : 0).toFixed(2);
+    const dateHeader = document.createElement("h3");
+    dateHeader.textContent = formatDate(workout.date);
+    workoutBox.appendChild(dateHeader);
 
-    const info = document.createElement("div");
-    info.className = "workout-history-info";
-    info.textContent = `${dateStr} — Exercises: ${exerciseCount} — Total Volume: ${totalVolume} kg`;
-    item.appendChild(info);
+    const exercisesList = document.createElement("ul");
+    exercisesList.className = "workout-exercises-list";
+
+    let totalVolume = 0;
+
+    if (Array.isArray(workout.exercises)) {
+      workout.exercises.forEach(ex => {
+        const volume = (ex.sets || 0) * (ex.reps || 0) * (ex.weight || 0);
+        totalVolume += volume;
+
+        const li = document.createElement("li");
+        li.textContent = `${ex.name} — Sets: ${ex.sets}, Reps: ${ex.reps}, Weight: ${ex.weight} kg, Volume: ${volume.toFixed(2)} kg`;
+        exercisesList.appendChild(li);
+      });
+    }
+
+    workoutBox.appendChild(exercisesList);
+
+    const totalVolumeDiv = document.createElement("div");
+    totalVolumeDiv.className = "workout-total-volume";
+    totalVolumeDiv.textContent = `Total Volume: ${totalVolume.toFixed(2)} kg`;
+    workoutBox.appendChild(totalVolumeDiv);
+
+    const buttonsDiv = document.createElement("div");
+    buttonsDiv.className = "workout-history-buttons";
 
     if (handlers.onViewDetails) {
       const viewBtn = document.createElement("button");
       viewBtn.textContent = "View";
       viewBtn.className = "btn-view-workout";
       viewBtn.addEventListener("click", () => handlers.onViewDetails(index));
-      item.appendChild(viewBtn);
+      buttonsDiv.appendChild(viewBtn);
     }
 
     if (handlers.onEditWorkout) {
@@ -39,7 +56,7 @@ export function renderWorkoutHistory(container, workouts, handlers = {}) {
       editBtn.textContent = "Edit";
       editBtn.className = "btn-edit-workout";
       editBtn.addEventListener("click", () => handlers.onEditWorkout(index));
-      item.appendChild(editBtn);
+      buttonsDiv.appendChild(editBtn);
     }
 
     if (handlers.onDeleteWorkout) {
@@ -47,11 +64,11 @@ export function renderWorkoutHistory(container, workouts, handlers = {}) {
       deleteBtn.textContent = "Delete";
       deleteBtn.className = "btn-delete-workout";
       deleteBtn.addEventListener("click", () => handlers.onDeleteWorkout(index));
-      item.appendChild(deleteBtn);
+      buttonsDiv.appendChild(deleteBtn);
     }
 
-    list.appendChild(item);
-  });
+    workoutBox.appendChild(buttonsDiv);
 
-  container.appendChild(list);
+    container.appendChild(workoutBox);
+  });
 }

@@ -67,12 +67,12 @@ function loadProfileData() {
   totalWorkoutsElem.textContent = workouts.length;
 
   const muscleCounts = {};
-  for (const group of muscleGroups) muscleCounts[group] = 0;
+  for (const group of muscleGroups) muscleCounts[group.toLowerCase()] = 0;
 
   for (const workout of workouts) {
     for (const ex of workout.exercises || []) {
       const mg = (ex.group || ex.muscleGroup || "").toLowerCase();
-      if (muscleCounts[mg] !== undefined) muscleCounts[mg]++;
+      if (mg && muscleCounts[mg] !== undefined) muscleCounts[mg]++;
     }
   }
 

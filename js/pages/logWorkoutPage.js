@@ -7,11 +7,26 @@ import {
   clearCurrentWorkout,
   buildLogWorkoutSection
 } from "../features/logWorkout/logWorkout.js";
+
 import { getSavedWorkouts, deleteWorkoutAtIndex } from "../core/workoutManager.js";
 import { renderWorkoutHistory } from "../ui/workoutHistoryUI.js";
+import { BiDirectionalPriorityQueue } from "../utils/priorityQueue.js";
+
+function sortWorkoutsByDate(workouts) {
+  const pq = new BiDirectionalPriorityQueue();
+
+  workouts.forEach((workout) => {
+    pq.enqueue(workout, new Date(workout.date).getTime());
+  });
+
+  const sortedWorkouts = [];
+  while (pq.size() > 0) {
+    sortedWorkouts.push(pq.dequeue('highest'));
+  }
+  return sortedWorkouts;
+}
 
 export async function initLogWorkoutPage() {
-
   const mainContent = document.querySelector("#content");
   mainContent.innerHTML = "";
   mainContent.appendChild(buildLogWorkoutSection());
@@ -188,10 +203,10 @@ export async function initLogWorkoutPage() {
         clearCurrentWorkout();
         renderWorkoutUI();
         renderButtons();
+
         const freshSavedWorkouts = getSavedWorkouts();
-        renderWorkoutHistory(historyContainer, freshSavedWorkouts, {
-          onDeleteWorkout
-        });
+        const sorted = sortWorkoutsByDate(freshSavedWorkouts);
+        renderWorkoutHistory(historyContainer, sorted, { onDeleteWorkout });
       } catch (err) {
         showFeedback(err.message, "error");
       }
@@ -237,13 +252,16 @@ export async function initLogWorkoutPage() {
   }
 
   function onDeleteWorkout(index) {
-    deleteWorkoutAtIndex(index); // your own implementation
-    const updated = getSavedWorkouts();
-    renderWorkoutHistory(historyContainer, updated, { onDeleteWorkout });
+    deleteWorkoutAtIndex(index);
+    const updatedWorkouts = getSavedWorkouts();
+    const sorted = sortWorkoutsByDate(updatedWorkouts);
+    renderWorkoutHistory(historyContainer, sorted, { onDeleteWorkout });
     showFeedback("Workout deleted.", "success");
   }
 
   renderWorkoutUI();
   renderButtons();
-  renderWorkoutHistory(historyContainer, savedWorkouts, { onDeleteWorkout });
+
+  const sortedWorkouts = sortWorkoutsByDate(savedWorkouts);
+  renderWorkoutHistory(historyContainer, sortedWorkouts, { onDeleteWorkout });
 }

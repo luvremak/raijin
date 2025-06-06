@@ -1,5 +1,6 @@
 import { muscleGroups, normalizedMuscleGroups } from "../utils/constants.js";
 import { capitalize } from "../utils/formatting.js";
+import { memoize } from "../utils/memoize.js";
 
 export function normalizeGroup(name) {
   return (name || "").toLowerCase().trim();
@@ -9,14 +10,14 @@ export function getAllWorkouts() {
   return JSON.parse(localStorage.getItem("workouts") || "[]");
 }
 
-export function getWorkoutsInRange(startDate, endDate) {
+export const getWorkoutsInRange = memoize(function (startDate, endDate) {
   return getAllWorkouts().filter(w => {
     const d = new Date(w.date);
     return d instanceof Date && !isNaN(d) && d >= startDate && d <= endDate;
   });
-}
+});
 
-export function getVolumeByMuscle(startDate, endDate) {
+export const getVolumeByMuscle = memoize(function (startDate, endDate) {
   const workouts = getWorkoutsInRange(startDate, endDate);
   const volume = Object.fromEntries(muscleGroups.map(g => [g, 0]));
 
@@ -36,9 +37,9 @@ export function getVolumeByMuscle(startDate, endDate) {
   }
 
   return volume;
-}
+});
 
-export function getSetDistribution(startDate, endDate) {
+export const getSetDistribution = memoize(function (startDate, endDate) {
   const workouts = getWorkoutsInRange(startDate, endDate);
   const sets = Object.fromEntries(muscleGroups.map(g => [g, 0]));
 
@@ -54,9 +55,9 @@ export function getSetDistribution(startDate, endDate) {
   }
 
   return sets;
-}
+});
 
-export function getTopExercises(limit = 5) {
+export const getTopExercises = memoize(function (limit = 5) {
   const workouts = getAllWorkouts();
   const freq = {};
 
@@ -76,9 +77,9 @@ export function getTopExercises(limit = 5) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, limit)
     .map(([name, count]) => [capitalize(name), count]);
-}
+});
 
-export function getDailyVolume(days = 7) {
+export const getDailyVolume = memoize(function (days = 7) {
   const workouts = getAllWorkouts();
   const now = new Date();
   const start = new Date(now);
@@ -101,7 +102,7 @@ export function getDailyVolume(days = 7) {
   }
 
   return dailyVolume;
-}
+});
 
 export function getLeastTrainedMuscle(groupTotals) {
   return Object.entries(groupTotals).reduce((minGroup, [group, volume]) => {

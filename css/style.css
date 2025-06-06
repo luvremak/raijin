@@ -281,3 +281,55 @@ form button {
     border-radius: var(--radius);
   }
 }
+
+.workout-history-box {
+  background-color: var(--clr-grey-medium);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  color: var(--clr-light);
+}
+
+.workout-history-box h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: var(--clr-orange);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.workout-exercises-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 1rem;
+}
+
+.workout-exercises-list li {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--clr-light);
+}
+
+.workout-total-volume {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--clr-orange-light);
+}
+
+.workout-history-buttons button {
+  background-color: var(--clr-orange);
+  color: var(--clr-dark);
+  border-radius: var(--radius);
+  border: none;
+  padding: 0.4rem 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.workout-history-buttons button:hover {
+  background-color: var(--clr-orange-light);
+}
