@@ -1,3 +1,4 @@
+// Task 6
 async function loadExercisesData() {
   const res = await fetch("data/exercises.json");
   const defaultData = await res.json();
